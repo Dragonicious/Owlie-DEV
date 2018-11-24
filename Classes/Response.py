@@ -1,5 +1,7 @@
 import re
 import random
+
+import sys
 from config import config
 # from Classes.Answer import Answer
 from Classes.Interpreter import Interpreter
@@ -11,11 +13,9 @@ class Response:
 	def __init__(self, bot, message):
 		self.bot = bot
 		self.message = message
-		# message.conent.replace()
 		self.words = Interpreter.parse(message.content.replace(config.bot_mention, ""))
+		print("words at init: ", self.words)
 
-		# self.pick_response(self.words, 0)
-		# return None
 
 	class Action:
 		def __init__(self,action_name):
@@ -28,15 +28,15 @@ class Response:
 
 
 	async def pick_response(self, at_word = 0, tree = None):
-		words = self.words
+		init_at_word = at_word
+		# words = self.words
 		if tree == None and at_word == 0:
-			tree = self.responses
-		# if type(words) is str:
-		# 	words = Interpreter.parse(words)
-		print(at_word)
+			tree = self.tree
+		print(tree);
+		# print(at_word)
 		for branch in tree:
 			print("Checking in : ", branch)
-			for word in words:
+			for word in self.words:
 				word_checks = branch.split(' ')
 				if word in word_checks and word != '':
 					print('Found: ', word)
@@ -49,14 +49,7 @@ class Response:
 					elif type(tree[branch]) is self.Action:
 						print("------- Executing: ", tree[branch].do)
 						if tree[branch].do == 'define':
-							
-							try:
-								embed_content = Dictionary(words[int(at_word)+1:]).embed()
-								await self.bot.send_message(self.message.channel, "would embed definition"+embed_content)
-							except Exception as inst:
-								await self.bot.send_message(self.message.channel, "Congratulations, you broke me: ```py "+str(inst)+" ```")
-							# return None
-
+							await self.bot.send_message(self.message.channel, "", embed = Dictionary(self.words[int(at_word+1):]).embed())
 					#__________________________________________________________________
 					else:
 						print("LOOKING FOR NEXT")
@@ -66,13 +59,14 @@ class Response:
 								continue
 							else:
 								return further_check 
-				else:
+				else:	
 					at_word += 1
 					continue
-		return None
+			at_word = 0
+		return False
 
 		
-	owlies_maker = Reply([
+	my_maker_is = Reply([
 		config.owner_mention + " is my daddy!"
 		,config.owner_mention + " made me. ^^"
 		,"I thank <@308661300039385088> for my artificial life."
@@ -89,11 +83,14 @@ class Response:
 		,"*I AM YOUR GOD!*"
 		,"None of your business >.>"
 	])
+	what_i_do = Reply([
+		"Whatever i want!"
+	])
 
 	define = Action('define')
 
 
-	responses = {
+	tree = {
 		'define' : define
 
 		,'who'	: {
@@ -102,6 +99,12 @@ class Response:
 			}
 			,'is'	: {
 				'owlie' : who_am_i
+				,'your'	: {
+					'creator maker coder owner'	: my_maker_is
+				}
+			}
+			,'made'	: {
+				'you' : my_maker_is
 			}
 		}
 		,'what'	: {
@@ -110,46 +113,10 @@ class Response:
 					who_am_i
 				}
 			}
+			,'do'	: {
+				'you'	: {
+					'do'	: what_i_do
+				}
+			}
 		}
 	}
-
-
-
-	# responses = {
-	# 	'define' : define
-
-	# 	,'who what' : {
-	# 		'are is' : {
-	# 			'you owlie' : who_are_you
-	# 		}
-	# 	}
-	# 	,"who's who" : {
-	# 		"is " : {
-	# 			"your ur thy owlie's" : {
-	# 				"owner creator maker programmer coder" : owlies_maker
-	# 			}
-	# 		}
-	# 		,"made created coded programmed" : {
-	# 			"you owlie u" : owlies_maker
-	# 		}
-	# 	}
-	# 	,'introduce tell-us-about ' : {
-	# 		'yourself thyself' : introduction
-	# 	}
-	# }
-#========================================= testing 
-# import re
-
-# def prase_message(message):
-# 	initial_string = str(message)
-# 	pure_string = re.sub('[^A-Za-z0-9 ]+', '', initial_string)
-# 	clean_string = re.sub(' +', ' ', pure_string)
-# 	word_array = clean_string.split(" ")
-# 	return word_array
-
-
-# words = prase_message("Hi owlie,	  introduce yourself, please ^^")
-# print(words)
-
-# re = Response();
-# re.respond_to(words)

@@ -4,7 +4,6 @@ from Classes.Reader import Reader
 from config import config
 
 bot 		= discord.Client()
-# embedder 	= discord.Embed()
 config		= config()
 Reader 		= Reader(bot, None)
 
@@ -30,11 +29,3 @@ async def on_member_join(member):
 bot.run(config.bot_key)
 
 logging.info('Owlie: Ready!')
-
-# @bot.event
-# async def when_mentioned(bot, message):
-# 	await bot.send_message(message.channel, "Who poked me!?")
-
-# @bot.event
-# async def on_member_remove(member):
-# 	await bot.send_message(discord.Object(id=""), "Pasiilgsim tavęs, "+member.mention)

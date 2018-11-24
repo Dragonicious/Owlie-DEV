@@ -1,8 +1,5 @@
-# from Classes.Responses import Responses
-# from Classes.Answer import Answer
 import re
 class Interpreter:
-	# Responses = Responses()
 	def __init__():
 		pass
 
