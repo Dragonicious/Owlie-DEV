@@ -73,14 +73,14 @@ class Response:
 
 		
 	owlies_maker = Reply([
-		"<@308661300039385088> is my daddy!"
-		,"<@308661300039385088> made me. ^^"
+		config.owner_mention + " is my daddy!"
+		,config.owner_mention + " made me. ^^"
 		,"I thank <@308661300039385088> for my artificial life."
 	])
 	introduction = Reply([
 		"I'm a friendly owl, who looks over this server. My job is to get rid of spammers, mostly."
 	])
-	who_are_you = Reply([
+	who_am_i = Reply([
 		"Just a friendly neighborhood owl. ^^"
 		,"I'm an owl, duh.."
 		,"I'm a cyborg-owl *beep boop*."
@@ -96,25 +96,47 @@ class Response:
 	responses = {
 		'define' : define
 
-		,'who what' : {
-			'are is' : {
-				'you owlie' : who_are_you
+		,'who'	: {
+			'are'	: {
+				'you' : who_am_i
+			}
+			,'is'	: {
+				'owlie' : who_am_i
 			}
 		}
-		,"who's who" : {
-			"is " : {
-				"your ur thy owlie's" : {
-					"owner creator maker programmer coder" : owlies_maker
+		,'what'	: {
+			'are'	: {
+				'you' : {
+					who_am_i
 				}
 			}
-			,"made created coded programmed" : {
-				"you owlie u" : owlies_maker
-			}
-		}
-		,'introduce tell-us-about ' : {
-			'yourself thyself' : introduction
 		}
 	}
+
+
+
+	# responses = {
+	# 	'define' : define
+
+	# 	,'who what' : {
+	# 		'are is' : {
+	# 			'you owlie' : who_are_you
+	# 		}
+	# 	}
+	# 	,"who's who" : {
+	# 		"is " : {
+	# 			"your ur thy owlie's" : {
+	# 				"owner creator maker programmer coder" : owlies_maker
+	# 			}
+	# 		}
+	# 		,"made created coded programmed" : {
+	# 			"you owlie u" : owlies_maker
+	# 		}
+	# 	}
+	# 	,'introduce tell-us-about ' : {
+	# 		'yourself thyself' : introduction
+	# 	}
+	# }
 #========================================= testing 
 # import re
 
