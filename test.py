@@ -1,1 +1,2 @@
-dis a test yo
+class ye:
+	pass
