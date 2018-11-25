@@ -37,12 +37,12 @@ class Response:
 			#try to find a start of an expected phrase, starting with each word ?
 			for actual_word_id in range(next_word, len(self.words)):
 				actual_word = self.words[actual_word_id]
-				# print ("expected-word: ", expected_word,  "matching with: ", actual_word)
+				print ("expected-word: ", expected_word,  "matching with: ", actual_word)
 				
 				if actual_word == expected_word:
 					#if i find a matching key 
 					next_tree = current_tree[expected_word]
-					# print(" ========== found, next tree: ", next_tree, type(next_tree))
+					print(" ========== found, next tree: ", next_tree, type(next_tree))
 
 					if type(next_tree) is dict or type(next_tree) is list:
 						#look for next word in next tree = next expected word
