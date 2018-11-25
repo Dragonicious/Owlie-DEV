@@ -38,9 +38,10 @@ class Response:
 			#try to find a start of an expected phrase, starting with each word ?
 			for actual_word_id in range(0, len(self.words)):
 				actual_word = self.words[actual_word_id]
-				print ("expected-word: ", expected_word,  "matching with: ", actual_word)
+				# print ("expected-word: ", expected_word,  "matching with: ", actual_word)
 				
 				if actual_word == expected_word and not i_replied:
+					print("lvl/word: ",next_word, "match at:  ",expected_word, " == ", actual_word)
 					#if i find a matching key 
 					next_tree = current_tree[expected_word]
 					print(" ========== found, next tree: ", next_tree, type(next_tree))
@@ -59,10 +60,11 @@ class Response:
 
 					elif type(next_tree) is dict or type(next_tree) is list:
 						#look for next word in next tree = next expected word
-						print('digging deeper to ', next_tree)
+						# print('digging deeper to ', next_tree)
 						next_level = await self.respond(next_word+1, next_tree)
 						if next_level == True:
-							print("i replied", next_level)
+							print("lvl/word: ",next_word, "break  at:  ",expected_word, " == ", actual_word)
+							# print("i replied", next_level)
 							i_replied = True
 							break
 					else:
