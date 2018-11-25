@@ -11,7 +11,7 @@ logging.basicConfig(filename='events.log', 			format='%(asctime)s %(levelname)s:
 
 @bot.event
 async def on_ready():
-	print('Owlie: Ready!')
+	print("Owlie's ready! ^^")
 
 @bot.event
 async def on_message(message):
