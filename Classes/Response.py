@@ -45,7 +45,7 @@ class Response:
 					if isinstance(tree[branch], self.Reply):
 						print('-------- Replying')
 						await self.bot.send_message(self.message.channel, tree[branch].msg())
-						# return None
+						return False
 
 					elif type(tree[branch]) is self.Action:
 						print("------- Executing: ", tree[branch].do)
@@ -57,12 +57,14 @@ class Response:
 									await Reactions(self.bot, self.message).add('huh?')
 								else:
 									await Reactions(self.bot, self.message).add('error')
-								answer = None
+								return False
 							else:
 								if answer:
 									await self.bot.send_message(self.message.channel, "", embed = answer)
 								else:
 									await Reactions(self.bot, self.message).add('error')
+								return False
+
 					#__________________________________________________________________
 					else:
 						# print("LOOKING FOR NEXT")
