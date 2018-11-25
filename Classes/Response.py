@@ -32,7 +32,7 @@ class Response:
 		if current_tree == None:
 			current_tree = self.word_tree
 
-		next_word = 0
+		# next_word = 0
 		for expected_word in current_tree:
 			#try to find a start of an expected phrase, starting with each word ?
 			for actual_word_id in range(next_word, len(self.words)):
