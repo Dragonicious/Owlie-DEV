@@ -64,6 +64,7 @@ class Response:
 						next_level = await self.respond(next_word+1, next_tree)
 						if next_level == True:
 							print("lvl/word: ",next_word, "break  at:  ",expected_word, " == ", actual_word)
+							return True
 							# print("i replied", next_level)
 							i_replied = True
 							break
