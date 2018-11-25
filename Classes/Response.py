@@ -15,7 +15,7 @@ class Response:
 		self.bot = bot
 		self.message = message
 		self.words = Interpreter.parse(message.content.replace(config.bot_mention, ""))
-		print("words at init: ", self.words)
+		# print("words at init: ", self.words)
 
 
 	class Action:
@@ -26,6 +26,69 @@ class Response:
 			self.answers = possible_replies
 		def msg(self):
 			return self.answers[random.randint(0, len(self.answers))-1] #return a random asnwer
+
+
+	async def resond(self, next_word = 0, current_tree = None):
+		if current_tree == None:
+			current_tree = self.word_tree
+
+		word_id = 0
+		for expected_word in current_tree:
+			print ("expected-word: ", expected_word,  "looking for", self.words[word_id])
+			if self.words[word_id] == expected_word:
+				print(" ========== found")
+				#if i find a matching key 
+				next_tree = current_tree[expected_word]
+				if type(next_tree) is dict or type(next_tree) is list:
+					#look for next word in next tree
+					self.respond(word_id+1, next_tree)
+
+				else:
+					request = next_tree
+					#check if type of matched key's value is an answer:
+					if isinstance(request, self.Reply):
+						print('-------- Replying')
+						await self.bot.send_message(self.message.channel, request.msg())
+						return None
+
+					elif type(request) is self.Action:
+						print("------- Executing: ", request.do)
+						self.execute_action(request, next_word)
+			else:
+				#look for next word in currnt tree
+				pass
+
+
+
+
+	async def execute_action(self, action, next_word = None):
+		if action.do == 'define':
+			try:
+				#request next words after 'define' 
+				answer = Dictionary(self.words[int(next_word+1):]).embed()
+			except Exception as ex:
+				if (ex.args[0] == '404'):
+					#phrase not found
+					await Reactions(self.bot, self.message).add('huh?')
+				else:
+					#some other error
+					print(ex.args)
+					await Reactions(self.bot, self.message).add('error')
+				return None
+			else:
+				if answer:
+					await self.bot.send_message(self.message.channel, "", embed = answer)
+				return None
+		else:
+			return None
+
+
+
+
+
+
+
+
 
 
 	async def pick_response(self, at_word = 0, tree = None):
@@ -105,7 +168,7 @@ class Response:
 	define = Action('define')
 
 
-	tree = {
+	word_tree = {
 		'define' : define
 
 		,'who'	: {
