@@ -58,7 +58,7 @@ class Response:
 
 						elif type(request) is self.Action:
 							print("------- Executing: ", request.do)
-							await self.execute_action(request, next_word)
+							await self.execute_action(request, actual_word_id)
 				else:
 					#look for next word in currnt tree
 					pass
