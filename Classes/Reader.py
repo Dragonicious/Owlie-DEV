@@ -36,7 +36,7 @@ class Reader:
 
 		last_msg_sub = self.Holder.sub(message.author.id)
 		tmp_print_msg = str(last_msg_sub.name) + ": " +str(last_msg_sub.last_message) +"          [spm:I"+ str(last_msg_sub.identical_spam) +";R:"+ str(last_msg_sub.random_spam) +"] [W:"+str(last_msg_sub.warnings)+"]"
-		print(tmp_print_msg)
+		print("\t\t"+str(tmp_print_msg)+" H.["+str(len(self.Holder.hold))+"]")
 			
 
 
