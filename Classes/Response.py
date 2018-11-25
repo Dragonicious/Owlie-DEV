@@ -36,7 +36,7 @@ class Response:
 		i_replied = False
 		for expected_word in current_tree:
 			#try to find a start of an expected phrase, starting with each word ?
-			for actual_word_id in range(next_word, len(self.words)):
+			for actual_word_id in range(0, len(self.words)):
 				actual_word = self.words[actual_word_id]
 				print ("expected-word: ", expected_word,  "matching with: ", actual_word)
 				
