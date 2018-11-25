@@ -13,7 +13,8 @@ class Holder:
 		try:
 			with open('holder.json', 'r') as file:
 				loaded_data = json.load(file)
-		except:
+		except Exception as e:
+			print("!!! Failed to load holder", str(e.args))
 			return []
 		if loaded_data:
 			for subject in loaded_data:

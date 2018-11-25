@@ -27,8 +27,11 @@ class Reader:
 		if self.config.bot_mention in message.content or message.content.startswith("!"):
 			Response_prep = Response(self.bot, message)
 			await Response_prep.pick_response()
+
 		updt = threading.Thread(target=self.Holder.update, args=(message,))
+		save = threading.Thread(target=self.Holder.save_data)
 		updt.start() #keep dat shit up to date
+		save.start()
 
 		last_msg_sub = self.Holder.sub(message.author.id)
 		tmp_print_msg = str(last_msg_sub.name) + ": " +str(last_msg_sub.last_message) +"          [spm:I"+ str(last_msg_sub.identical_spam) +";R:"+ str(last_msg_sub.random_spam) +"] [W:"+str(last_msg_sub.warnings)+"]"
