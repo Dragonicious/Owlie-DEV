@@ -40,7 +40,7 @@ class Response:
 			for word in self.words:
 				word_checks = branch.split(' ')
 				if word in word_checks and word != '':
-					# print('Found: ', word)
+					print('Found: ', word, tree[branch])
 					#____________________________ things to do _________________________
 					if isinstance(tree[branch], self.Reply):
 						print('-------- Replying')
