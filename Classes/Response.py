@@ -40,7 +40,7 @@ class Response:
 				actual_word = self.words[actual_word_id]
 				print ("expected-word: ", expected_word,  "matching with: ", actual_word)
 				
-				if actual_word == expected_word:
+				if actual_word == expected_word and not i_replied:
 					#if i find a matching key 
 					next_tree = current_tree[expected_word]
 					print(" ========== found, next tree: ", next_tree, type(next_tree))
