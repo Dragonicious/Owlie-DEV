@@ -1,2 +1,2 @@
 class ye:
-	pass
+	pass or no
