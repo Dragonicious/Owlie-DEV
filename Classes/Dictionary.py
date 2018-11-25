@@ -45,5 +45,6 @@ class Dictionary:
 		if not data:
 			return False
 		phrase 	= " ".join(data['word'].split("_"))
-		embed 	= discord.Embed(title=phrase+":", description=data['definition'], color=0x824cb3)
+		embed 	= discord.Embed(title=phrase+":", description=data['definition'], color=0x824cb3, footer='According to Oxford Dictionary')
+		
 		return embed
