@@ -46,7 +46,7 @@ class Response:
 
 					if type(next_tree) is dict or type(next_tree) is list:
 						#look for next word in next tree = next expected word
-						self.respond(word_id+1, next_tree)
+						await self.respond(word_id+1, next_tree)
 
 					else:
 						request = next_tree
