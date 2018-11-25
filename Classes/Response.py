@@ -34,29 +34,34 @@ class Response:
 
 		word_id = 0
 		for expected_word in current_tree:
-			print ("expected-word: ", expected_word,  "looking for", self.words[word_id])
-			if self.words[word_id] == expected_word:
-				print(" ========== found")
-				#if i find a matching key 
-				next_tree = current_tree[expected_word]
-				if type(next_tree) is dict or type(next_tree) is list:
-					#look for next word in next tree
-					self.respond(word_id+1, next_tree)
+			#try to find a start of an expected phrase, starting with each word ?
+			for actual_word_id in range(0, len(self.words)):
+				actual_word = self.words[actual_word_id]
+				print ("expected-word: ", expected_word,  "matching with: ", actual_word)
+				
+				if actual_word == expected_word:
+					#if i find a matching key 
+					next_tree = current_tree[expected_word]
+					print(" ========== found, next tree: ", next_tree, type(next_tree))
 
+					if type(next_tree) is dict or type(next_tree) is list:
+						#look for next word in next tree = next expected word
+						self.respond(word_id+1, next_tree)
+
+					else:
+						request = next_tree
+						#check if type of matched key's value is an answer:
+						if isinstance(request, self.Reply):
+							print('-------- Replying')
+							await self.bot.send_message(self.message.channel, request.msg())
+							return None
+
+						elif type(request) is self.Action:
+							print("------- Executing: ", request.do)
+							await self.execute_action(request, next_word)
 				else:
-					request = next_tree
-					#check if type of matched key's value is an answer:
-					if isinstance(request, self.Reply):
-						print('-------- Replying')
-						await self.bot.send_message(self.message.channel, request.msg())
-						return None
-
-					elif type(request) is self.Action:
-						print("------- Executing: ", request.do)
-						await self.execute_action(request, next_word)
-			else:
-				#look for next word in currnt tree
-				pass
+					#look for next word in currnt tree
+					pass
 
 
 
