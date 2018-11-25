@@ -33,6 +33,7 @@ class Response:
 			current_tree = self.word_tree
 
 		# next_word = 0
+		i_replied = False
 		for expected_word in current_tree:
 			#try to find a start of an expected phrase, starting with each word ?
 			for actual_word_id in range(next_word, len(self.words)):
@@ -46,25 +47,28 @@ class Response:
 
 					if type(next_tree) is dict or type(next_tree) is list:
 						#look for next word in next tree = next expected word
-						await self.respond(next_word+1, next_tree)
-
+						next_level = await self.respond(next_word+1, next_tree)
+						if next_level == True:
+							i_replied = True
+							break
 					else:
 						request = next_tree
 						#check if type of matched key's value is an answer:
 						if type(request) is self.Reply:
 							print('-------- Replying')
 							await self.bot.send_message(self.message.channel, request.msg())
-							break
-							return None
+							return True
 
 						elif type(request) is self.Action:
 							print("------- Executing: ", request.do)
 							await self.execute_action(request, actual_word_id)
-							break
-							return None
+							return True
 				else:
 					#look for next word in currnt tree
 					pass
+			if i_replied:
+				break
+		return False
 				
 
 	async def execute_action(self, action, next_word = None):
