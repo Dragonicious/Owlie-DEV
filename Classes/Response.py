@@ -54,11 +54,14 @@ class Response:
 						if type(request) is self.Reply:
 							print('-------- Replying')
 							await self.bot.send_message(self.message.channel, request.msg())
+							break
 							return None
 
 						elif type(request) is self.Action:
 							print("------- Executing: ", request.do)
 							await self.execute_action(request, actual_word_id)
+							break
+							return None
 				else:
 					#look for next word in currnt tree
 					pass
