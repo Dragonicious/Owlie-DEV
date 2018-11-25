@@ -28,7 +28,7 @@ class Response:
 			return self.answers[random.randint(0, len(self.answers))-1] #return a random asnwer
 
 
-	async def resond(self, next_word = 0, current_tree = None):
+	async def respond(self, next_word = 0, current_tree = None):
 		if current_tree == None:
 			current_tree = self.word_tree
 
