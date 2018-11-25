@@ -45,24 +45,28 @@ class Response:
 					next_tree = current_tree[expected_word]
 					print(" ========== found, next tree: ", next_tree, type(next_tree))
 
-					if type(next_tree) is dict or type(next_tree) is list:
+					request = next_tree
+					#check if type of matched key's value is an answer:
+					if isinstance(request, self.Reply): #type(request) is self.Reply:
+						print('-------- Replying')
+						await self.bot.send_message(self.message.channel, request.msg())
+						return True
+
+					elif type(request) is self.Action:
+						print("------- Executing: ", request.do)
+						await self.execute_action(request, actual_word_id)
+						return True
+
+					elif type(next_tree) is dict or type(next_tree) is list:
 						#look for next word in next tree = next expected word
+						print('digging deeper to ', next_tree)
 						next_level = await self.respond(next_word+1, next_tree)
 						if next_level == True:
+							print("i replied", next_level)
 							i_replied = True
 							break
 					else:
-						request = next_tree
-						#check if type of matched key's value is an answer:
-						if isinstance(request, self.Reply): #type(request) is self.Reply:
-							print('-------- Replying')
-							await self.bot.send_message(self.message.channel, request.msg())
-							return True
-
-						elif type(request) is self.Action:
-							print("------- Executing: ", request.do)
-							await self.execute_action(request, actual_word_id)
-							return True
+						pass 
 				else:
 					#look for next word in currnt tree
 					pass
