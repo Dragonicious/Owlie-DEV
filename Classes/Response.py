@@ -32,10 +32,10 @@ class Response:
 		if current_tree == None:
 			current_tree = self.word_tree
 
-		word_id = 0
+		next_word = 0
 		for expected_word in current_tree:
 			#try to find a start of an expected phrase, starting with each word ?
-			for actual_word_id in range(0, len(self.words)):
+			for actual_word_id in range(next_word, len(self.words)):
 				actual_word = self.words[actual_word_id]
 				# print ("expected-word: ", expected_word,  "matching with: ", actual_word)
 				
@@ -46,7 +46,7 @@ class Response:
 
 					if type(next_tree) is dict or type(next_tree) is list:
 						#look for next word in next tree = next expected word
-						await self.respond(word_id+1, next_tree)
+						await self.respond(next_word+1, next_tree)
 
 					else:
 						request = next_tree
@@ -65,6 +65,7 @@ class Response:
 				else:
 					#look for next word in currnt tree
 					pass
+				
 
 	async def execute_action(self, action, next_word = None):
 		if action.do == 'define':
