@@ -42,7 +42,7 @@ class Response:
 				if word in word_checks and word != '':
 					# print('Found: ', word)
 					#____________________________ things to do _________________________
-					if type(tree[branch]) is self.Reply:
+					if isinstance(tree[branch], self.Reply):
 						print('-------- Replying')
 						await self.bot.send_message(self.message.channel, tree[branch].msg())
 						# return None
