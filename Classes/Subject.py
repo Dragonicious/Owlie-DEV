@@ -17,6 +17,7 @@ class Subject:
 		self.last_embed		= self.embed_str(message)
 		self.last_timestamp = time.time()
 		self.warnings 		= {}
+		self.actions		= {}
 	
 	@staticmethod
 	def embed_str(message):
@@ -34,6 +35,13 @@ class Subject:
 		else:
 			self.warnings[category] += 1
 
+	def add_action(self, action):
+		if action not in self.actions:
+			self.actions[action] = {
+				'timestamp' : time.time()
+			}
+
+		
 	def load(self, message):
 		self.id 			= message['id']
 		self.name			= message['name']
@@ -43,3 +51,7 @@ class Subject:
 		self.last_embed		= message['last_embed']
 		self.last_timestamp = message['last_timestamp']
 		self.warnings 		= message['warnings']
+		if message['actions']:
+			self.actions 	= message['actions']
+		else:
+			self.actions	= {}

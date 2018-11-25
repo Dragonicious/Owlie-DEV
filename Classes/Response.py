@@ -35,14 +35,12 @@ class Response:
 		print(tree);
 		# print(at_word)
 		for branch in tree:
-			print("Checking in : ", branch)
 			for word in self.words:
 				word_checks = branch.split(' ')
 				if word in word_checks and word != '':
-					print('Found: ', word)
 					#____________________________ things to do _________________________
 					if type(tree[branch]) is self.Reply:
-						print('replying')
+						print('----------Replying')
 						await self.bot.send_message(self.message.channel, tree[branch].msg())
 						# return None
 
