@@ -36,7 +36,7 @@ class Response:
 		# print(tree);
 		# print(at_word)
 		for branch in tree:
-			# print("Checking in : ", branch)
+			# print("Checking in : ", branch) 
 			for word in self.words:
 				word_checks = branch.split(' ')
 				if word in word_checks and word != '':
