@@ -54,7 +54,7 @@ class Response:
 					else:
 						request = next_tree
 						#check if type of matched key's value is an answer:
-						if type(request) is self.Reply:
+						if isinstance(request, self.Reply): #type(request) is self.Reply:
 							print('-------- Replying')
 							await self.bot.send_message(self.message.channel, request.msg())
 							return True
