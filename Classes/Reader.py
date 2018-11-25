@@ -26,7 +26,8 @@ class Reader:
 
 		if self.config.bot_mention in message.content or message.content.startswith("!"):
 			Response_prep = Response(self.bot, message)
-			await Response_prep.pick_response()
+			await Response_prep.respond()
+			# await Response_prep.pick_response()
 
 		updt = threading.Thread(target=self.Holder.update, args=(message,))
 		save = threading.Thread(target=self.Holder.save_data)
