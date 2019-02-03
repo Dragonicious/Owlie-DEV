@@ -1,6 +1,6 @@
 import re
 import random
-
+import discord
 import sys
 from config import config
 # from Classes.Answer import Answer
@@ -15,6 +15,7 @@ class Response:
 		self.bot = bot
 		self.message = message
 		self.words = Interpreter.parse(message.content.replace(config.bot_mention, ""))
+		
 		# print("words at init: ", self.words)
 
 
@@ -29,6 +30,7 @@ class Response:
 
 
 	async def respond(self, next_word = 0, current_tree = None):
+		#goes through pre-defined word tree, looking for message responses or actions to execute
 		if current_tree == None:
 			current_tree = self.word_tree
 
@@ -38,34 +40,26 @@ class Response:
 			#try to find a start of an expected phrase, starting with each word ?
 			for actual_word_id in range(0, len(self.words)):
 				actual_word = self.words[actual_word_id]
-				# print ("expected-word: ", expected_word,  "matching with: ", actual_word)
 				
 				if actual_word == expected_word and not i_replied:
-					# print("lvl/word: ",next_word, "match at:  ",expected_word, " == ", actual_word)
 					#if i find a matching key 
 					next_tree = current_tree[expected_word]
-					# print(" ========== found, next tree: ", next_tree, type(next_tree))
 
 					request = next_tree
 					#check if type of matched key's value is an answer:
-					if isinstance(request, self.Reply): #type(request) is self.Reply:
-						# print('-------- Replying')
+					if isinstance(request, self.Reply): 
 						await self.bot.send_message(self.message.channel, request.msg())
 						return True
 
 					elif type(request) is self.Action:
-						# print("------- Executing: ", request.do)
 						await self.execute_action(request, actual_word_id)
 						return True
 
 					elif type(next_tree) is dict or type(next_tree) is list:
 						#look for next word in next tree = next expected word
-						# print('digging deeper to ', next_tree)
 						next_level = await self.respond(next_word+1, next_tree)
 						if next_level == True:
-							# print("lvl/word: ",next_word, "break  at:  ",expected_word, " == ", actual_word)
 							return True
-							# print("i replied", next_level)
 							i_replied = True
 							break
 					else:
@@ -79,6 +73,7 @@ class Response:
 				
 
 	async def execute_action(self, action, next_word = None):
+		#------------------------------- dictioanry
 		if action.do == 'define':
 			try:
 				#request next words after 'define' 
@@ -90,12 +85,23 @@ class Response:
 				else:
 					#some other error
 					print(ex.args)
-					await Reactions(self.bot, self.message).add('error')
+					
 				return None
 			else:
 				if answer:
 					await self.bot.send_message(self.message.channel, "", embed = answer)
 				return None
+		#----------------------------------- dice roll
+		elif action.do == 'roll':
+			try:
+				limit = re.findall(r'\d+', str(self.words[int(next_word+1):]))
+				limit = limit[0]
+				if (int(limit)):
+					roll_embed 	= discord.Embed(title=random.randint(1,int(limit)), color=0x824cb3)
+					await self.bot.send_message(self.message.channel, "", embed = roll_embed)
+			except Exception as ex:
+				print(ex.args)
+				await Reactions(self.bot, self.message).add('error')
 		else:
 			return None
 
@@ -103,7 +109,7 @@ class Response:
 	my_maker_is = Reply([
 		config.owner_mention + " is my daddy!"
 		,config.owner_mention + " made me. ^^"
-		,"I thank <@308661300039385088> for my artificial life."
+		,"I thank "+config.owner_mention+" for my artificial life."
 	])
 	introduction = Reply([
 		"I'm a friendly owl, who looks over this server. My job is to get rid of spammers, mostly."
@@ -121,11 +127,13 @@ class Response:
 		"In my free time i enjoy contemplating ones and zeroes."
 	])
 
-	define = Action('define')
+	define	= Action('define')
+	roll	= Action('roll')
 
 
 	word_tree = {
 		'define' : define
+		,'roll'  : roll
 
 		,'who'	: {
 			'are'	: {
