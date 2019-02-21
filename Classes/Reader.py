@@ -23,6 +23,7 @@ class Reader:
 		if message.author.id not in self.Holder.subjects():
 			self.Holder.add_subject(Subject(message))
 
+		
 		spam_check = await self.check_spam(message)
 
 		if config.bot_mention in message.content or message.content.startswith("!"):
@@ -33,8 +34,8 @@ class Reader:
 		self.Holder.update(message)
 		#=================================================== console log
 		last_msg_sub = self.Holder.sub(message.author.id)
-		tmp_print_msg = str(last_msg_sub.name) + ": " +str(last_msg_sub.last_message) +"          [spm:I"+ str(last_msg_sub.identical_spam) +";R:"+ str(last_msg_sub.random_spam) +"] [W:"+str(last_msg_sub.warnings)+"]"
-		print("\t\t"+str(tmp_print_msg)+" H.["+str(len(self.Holder.hold))+"]")
+		tmp_print_msg = str(time.strftime("%m-%d %H:%M")) + " |\t" + str(last_msg_sub.name) + ": " +str(last_msg_sub.last_message)
+		print("\t"+str(tmp_print_msg))
 			
 
 	async def check_spam(self, message):

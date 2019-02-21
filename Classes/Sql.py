@@ -44,9 +44,12 @@ class Sql:
 
 	def get_all_subjects(self):
 		#get subject data
-		data = self.get("SELECT * FROM `members`")
-		print('INITIAL DATA: ',data)
-		return data
+		try:
+			data = self.get("SELECT * FROM `members`")
+		except Exception as ex:
+			print("!!!!!!!!!!!!!!!!!!!!!!!! LOAD error",ex.args)
+		else:
+			return data
 
 	def renew(self, subject):
 		query = "UPDATE `members` "\
@@ -63,6 +66,16 @@ class Sql:
 			"(`AUTHOR`, `NAME`, `SPAM_IDENT`, `SPAM_RND`, `LAST_MESSAGE`, `LAST_EMBED`, `LAST_TIMESTAMP`, `WARNINGS`, `ACTIONS`) "\
 			"VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
 		vals = (subject.id, subject.name, subject.identical_spam, subject.random_spam, subject.last_message, subject.last_embed, subject.last_timestamp, subject.warnings, subject.actions)
+		self.put(query, vals)
+
+	def log_stats(self, message):
+		query = "INSERT INTO `stats` "\
+			"(`CHANNEL`, `LENGTH`, `EMBEDS`) "\
+			"VALUES (%s, %s, %s)"
+		embeds = 0
+		for item in message.attachments:
+			embeds+=1
+		vals = (str(message.channel), len(str(message.content)), int(embeds))
 		self.put(query, vals)
 		
 		

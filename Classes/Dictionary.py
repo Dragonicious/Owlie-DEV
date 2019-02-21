@@ -24,7 +24,7 @@ class Dictionary:
 		try:
 			req = requests.get(url, headers= {'app_id':config.dict_app_id, 'app_key':config.dict_app_key})
 		except:
-			print("Dictionary error:")
+			print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Dictionary error:")
 			print("URL: " + str(url) + "\nreq = "+ str(req))
 			return False
 		if (req.status_code == 404):
@@ -35,7 +35,7 @@ class Dictionary:
 		try:
 			json_response = req.json()
 		except json.decoder.JSONDecodeError:
-			print("JSON undecodable")
+			print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! JSON undecodable")
 			print("URL: " + str(url) + "\nreq = "+ str(req))
 			return False
 

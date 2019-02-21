@@ -11,7 +11,7 @@ logging.basicConfig(filename='events.log', 			format='%(asctime)s %(levelname)s:
 
 @bot.event
 async def on_ready():
-	print("Owlie's ready! ^^")
+	print("_____________ Owlie's ready! ^^________________ ")
 
 @bot.event
 async def on_message(message):
@@ -24,4 +24,3 @@ async def on_member_join(member):
 	await bot.send_message(discord.Object(id=config.main_channel), "Hi "+member.mention+"! Nepamiršk paskaityti #info ir prisistatyti ^^ !")
 
 bot.run(config.bot_key)
-# logging.info('Owlie: Ready!')
