@@ -75,7 +75,7 @@ class owl:
 			if(os.path.exists("/proc/"+str(PID))):
 				return True
 			else:
-				logger.debug('Process file not found')
+				logger.warning('Process file not found')
 				return False
 			self.CURRENT_PID = str(PID)
 
@@ -87,6 +87,6 @@ class owl:
 				owlie = subprocess.Popen(['/bin/sh', os.path.expanduser('startup.sh')])
 				logger.debug("Starting new Owlie. PID: " +str(owlie.pid))
 			sleep(5)
-			
+
 if __name__ == "__main__":
 	owl = owl()

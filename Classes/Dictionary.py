@@ -1,3 +1,5 @@
+import logging
+logger = logging.getLogger('rpi')
 import requests
 import json
 import discord
@@ -12,14 +14,14 @@ class Dictionary:
 		data 	= self.define()
 		if not data:
 			return False
-		phrase 	= " ".join(data['word'].split("_"))
+		phrase 	= " ".join(data['word'].split("_"))  
 
 		defs = ''
 		nr = 1
 		for definition in data['defs'] :
 			if nr > 1:
 				defs += "\n"
-			defs += str(nr)+". "+ definition
+			defs += str(nr)+". "+ definition 
 			nr += 1
 
 		title = "**"+phrase+"**    "+data['pronoun']
@@ -34,21 +36,16 @@ class Dictionary:
 		try:
 			req = requests.get(url, headers= {'app_id':config.dict_app_id, 'app_key':config.dict_app_key})
 		except:
-			print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Dictionary error:")
-			print("URL: " + str(url) + "\nreq = "+ str(req))
+			logger.warning('Dictionary error: ' + str(url) +'\n' + str(e.__class__.__name__)+'\n'+str(e.args))
 			return False
 		if (req.status_code == 404):
-			# print("Dictionary error:")
-			print("URL: " + str(url) + "\nreq = "+ str(req))
 			raise Exception("404")
-		
+
 		try:
 			json_response = req.json()
 		except json.decoder.JSONDecodeError:
-			print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! JSON undecodable")
-			print("URL: " + str(url) + "\nreq = "+ str(req))
+			logger.warning('Dictionary - bad JSON: ' + "URL: " + str(url) + "\nreq = "+ str(req))
 			return False
-		# print(json_response)
 		return self.serialized_result(json_response)
 		
 	def serialized_result(self, result):

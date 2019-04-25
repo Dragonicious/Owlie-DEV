@@ -65,7 +65,7 @@ def run():
 	try:
 		owlie()
 	except Exception as e:
-		logger.critical('Owlie died:\n ' + +str(e.__class__.__name__)+'\n'+str(e.args))
+		logger.critical('Owlie died:\n ' + str(e.__class__.__name__)+'\n'+str(e.args))
 		crash_count += 1
 		run()
 
