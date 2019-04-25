@@ -1,54 +1,94 @@
 import json
-import MySQLdb
-import MySQLdb.cursors
+# try:
+
 from config import config
+try:
+	import MySQLdb
+	import MySQLdb.cursors
+	db_module = 'mysqldb'
+except ModuleNotFoundError:
+	try:
+		import pymysql
+		import pymysql.cursors
+		db_module = 'pymysql'
+	except:
+		db_module = None
+		print("SQL MODULE NOT FOUND")
+
 
 
 class Sql:
 	db = cursor = None
-	def __init__(self):
-		pass
-		# self.connect
+	def __init__(self, keepalive = False, database=config.db_db):
+		self.keepalive = keepalive 
+		self.db_db = database
+		if keepalive:
+			self.connect()
+
 		
 
 	def connect(self):
-		self.db 	= MySQLdb.connect(
-			host		= config.db_host
-			,user		= config.db_user
-			,passwd		= config.db_passwd
-			,db			= config.db_db
-			,connect_timeout = config.db_connect_timeout
-			,cursorclass=MySQLdb.cursors.DictCursor
-		)
-		self.db.set_character_set('utf8')
+		# print('Db type: ', db_module)
+		if db_module == 'pymysql':
+			self.db = pymysql.connect(host='192.168.1.188',
+				user=config.db_user,
+				password=config.db_passwd,
+				db=self.db_db,
+				charset='utf8mb4',
+				cursorclass=pymysql.cursors.DictCursor)
+			# self.db.set_character_set('utf8')
+
+		elif db_module == 'mysqldb':
+			self.db 	= MySQLdb.connect(
+				host		= config.db_host
+				,user		= config.db_user
+				,passwd		= config.db_passwd
+				,db			= self.db_db
+				,connect_timeout = config.db_connect_timeout
+				,cursorclass=MySQLdb.cursors.DictCursor
+			)
+			self.db.set_character_set('utf8')
 		self.cursor = self.db.cursor()
 
 	def disconnect (self):
 		self.db.close()
-		# self.cursor.close()
-		# self.cursor = None
+		if db_module == 'pymysql':
+			self.cursor.close()
+			self.cursor = None
 
 	def get(self, query, arguments=[]):
-		self.connect()
-		self.cursor.execute(query, arguments)
-		result = self.cursor.fetchall()
-		self.disconnect()
+		if not self.keepalive:
+			self.connect()
+
+		try:
+			with self.db.cursor() as cursor:
+				cursor.execute(query, arguments)
+				result = cursor.fetchall()
+		finally:
+			pass
+			# self.db.close
+
+		
+		if not self.keepalive:		
+			self.disconnect()
 		return result
 
-	def put(self, query, arguments=[]):
-		self.connect()
+	def put(self, query, arguments=[]):		
+		if not self.keepalive:
+			self.connect()
 		execute = self.cursor.execute(query, arguments)
 		self.db.commit()
-		self.disconnect()
+		if not self.keepalive:
+			self.disconnect()
 		return execute
 
 	def get_all_subjects(self):
 		#get subject data
-		try:
+		# try:
 			data = self.get("SELECT * FROM `members`")
-		except Exception as ex:
-			print("!!!!!!!!!!!!!!!!!!!!!!!! LOAD error",ex.args)
-		else:
+		# except Exception as ex:
+			# print("!!!!!!!!!!!!!!!!!!!!!!!! LOAD error",ex.args)
+		# else:
 			return data
 
 	def renew(self, subject):

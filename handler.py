@@ -10,7 +10,7 @@ class owl:
 	def __init__(self):
 		pass
 		# owlie = owlie()
-		self.config_os()
+		self.config_os() #determines OS
 		self.handler = threading.Thread(target=self.owlie_handler)
 		self.handler.start()
 		print(str(self.handler),flush=True)

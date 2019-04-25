@@ -13,7 +13,17 @@ class Dictionary:
 		if not data:
 			return False
 		phrase 	= " ".join(data['word'].split("_"))
-		embed 	= discord.Embed(title=phrase+":", description=data['definition'], color=0x824cb3, footer='According to Oxford Dictionary')
+
+		defs = ''
+		nr = 1
+		for definition in data['defs'] :
+			if nr > 1:
+				defs += "\n"
+			defs += str(nr)+". "+ definition
+			nr += 1
+
+		title = "**"+phrase+"**    "+data['pronoun']
+		embed 	= discord.Embed(title=title, description=defs, color=0x824cb3)
 		
 		return embed
 
@@ -29,7 +39,7 @@ class Dictionary:
 			return False
 		if (req.status_code == 404):
 			# print("Dictionary error:")
-			# print("URL: " + str(url) + "\nreq = "+ str(req))
+			print("URL: " + str(url) + "\nreq = "+ str(req))
 			raise Exception("404")
 		
 		try:
@@ -38,13 +48,30 @@ class Dictionary:
 			print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! JSON undecodable")
 			print("URL: " + str(url) + "\nreq = "+ str(req))
 			return False
-
+		# print(json_response)
 		return self.serialized_result(json_response)
 		
 	def serialized_result(self, result):
 		ret 			= {}
+		ret['defs']		= []
 		data 			= result['results'][0]
 		ret['word'] 	= data['id']
-		ret['definition'] = data['lexicalEntries'][0]['entries'][0]['senses'][0]['definitions'][0]
+		senses = data['lexicalEntries'][0]['entries'][0]['senses']
+
+
+		for sense in senses:
+			tmp_def = sense['definitions'][0]
+			ret['defs'].append(tmp_def)		
+			
+
+		ret['definition'] 	= data['lexicalEntries'][0]['entries'][0]['senses'][0]['definitions'][0]
+		ret['pronoun'] 		= data['lexicalEntries'][0]['pronunciations'][0]['phoneticSpelling']
+		# print 
 
 		return ret
+
+# testing 
+# dic = Dictionary(['definition'])
+# ret = dic.define()
+# print(json.dumps(ret, indent=4, sort_keys=True))
+# print(ret)
