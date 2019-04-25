@@ -1,8 +1,6 @@
 config.py
 *.json
-*.sh
 *.log
 *.txt
-*.sh
 __pycache__
 #ds

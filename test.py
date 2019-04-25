@@ -1,92 +1,115 @@
-import subprocess
-import threading
-import os
-import sys
-from time import sleep
-# from run import owlie
 
-class owl:
+import logging
+logger = logging.getLogger('rpi')
+logger.setLevel(logging.DEBUG)
 
-	def __init__(self):
-		pass
-		# owlie = owlie()
-		self.config_os()
-		self.handler = threading.Thread(target=self.owlie_handler)
-		self.handler.start()
-		print(str(self.handler),flush=True)
+logFormatter = logging.Formatter("%(asctime)s | %(threadName)-12.12s | %(levelname)-10.10s | %(message)s","%m-%d %H:%M:%S")
 
-		self.ui = threading.Thread(target=self.interface)
-		self.ui.start()
-		print(str(self.ui),flush=True)
+consoleLogger = logging.StreamHandler()
+consoleLogger.setLevel(logging.DEBUG)
+consoleLogger.setFormatter(logFormatter)
 
+fileLogger = logging.FileHandler(r'debug.log')
+fileLogger.setLevel(logging.DEBUG)
+fileLogger.setFormatter(logFormatter)
 
-		CURRENT_PID = ""
-		# self.interface()
-		# def start(self):
-		# 	self.bot_thread = threading.Thread(target=DiscordOwlie)
-		# 	print("Starting bot.")
-		# 	try:
-		# 		self.bot_thread.start()
-		# 	except Exception as start_except:
-		# 		print("Starting exc ", start_except);
-		# self.owlie_handler()
+logger.addHandler(consoleLogger)
+logger.addHandler(fileLogger)
 
-	def interface(self):
-		while True:
-			print("""Actions:
-				1. Owlie status
-				2. PID""",flush=True)
-			action = input()
-
-			if action == '1':
-				print("Thread: " + str(self.handler.isAlive()) + " -- " + str(self.handler),flush=True)
-			elif action == '2':
-				print("PID: ", self.CURRENT_PID)
-
-
-
-	def config_os(self):
-		opsys = sys.platform
-		if opsys in ['win32', 'win64']:
-			self.platform = 'win'
-		else:
-			self.platform = 'linux'
-		print("os:",opsys,flush=True)
+logger.critical("Can't open PID file.: ")
 
 
 
 
-	def PID_running(self):
-		try:
-			with open("PID.txt","r") as PID_FILE:
-				PID = int(PID_FILE.read())
-		except FileNotFoundError:
-			return False
-		except Exception as e:
-			print(str(e.args))
-		else:
-			if(os.path.exists("/proc/"+str(PID))):
-				print(".",end="",flush=True)
-			else:
-				print("no PID",flush=True)
-			self.CURRENT_PID = str(PID)
-			return os.path.exists("/proc/"+str(PID))
+# import subprocess
+# import threading
+# import os
+# import sys
+# from time import sleep
+# # from run import owlie
 
-	def owlie_handler(self):
+# class owl:
+
+# 	def __init__(self):
+# 		pass
+# 		# owlie = owlie()
+# 		self.config_os()
+# 		self.handler = threading.Thread(target=self.owlie_handler)
+# 		self.handler.start()
+# 		print(str(self.handler),flush=True)
+
+# 		self.ui = threading.Thread(target=self.interface)
+# 		self.ui.start()
+# 		print(str(self.ui),flush=True)
+
+
+# 		CURRENT_PID = ""
+# 		# self.interface()
+# 		# def start(self):
+# 		# 	self.bot_thread = threading.Thread(target=DiscordOwlie)
+# 		# 	print("Starting bot.")
+# 		# 	try:
+# 		# 		self.bot_thread.start()
+# 		# 	except Exception as start_except:
+# 		# 		print("Starting exc ", start_except);
+# 		# self.owlie_handler()
+
+# 	def interface(self):
+# 		while True:
+# 			print("""Actions:
+# 				1. Owlie status
+# 				2. PID""",flush=True)
+# 			action = input()
+
+# 			if action == '1':
+# 				print("Thread: " + str(self.handler.isAlive()) + " -- " + str(self.handler),flush=True)
+# 			elif action == '2':
+# 				print("PID: ", self.CURRENT_PID)
+
+
+
+# 	def config_os(self):
+# 		opsys = sys.platform
+# 		if opsys in ['win32', 'win64']:
+# 			self.platform = 'win'
+# 		else:
+# 			self.platform = 'linux'
+# 		print("os:",opsys,flush=True)
+
+
+
+
+# 	def PID_running(self):
+# 		try:
+# 			with open("PID.txt","r") as PID_FILE:
+# 				PID = int(PID_FILE.read())
+# 		except FileNotFoundError:
+# 			return False
+# 		except Exception as e:
+# 			print(str(e.args))
+# 		else:
+# 			if(os.path.exists("/proc/"+str(PID))):
+# 				print(".",end="",flush=True)
+# 			else:
+# 				print("no PID",flush=True)
+# 			self.CURRENT_PID = str(PID)
+# 			return os.path.exists("/proc/"+str(PID))
+
+# 	def owlie_handler(self):
 		
 					
 				
-		print("Loop..", end="",flush=True)
-		while True:
-			if self.PID_running():
-				sleep(5)
-			else:
-				print("starting new owlie with PID:",end="",flush=True)
-				owlie = subprocess.Popen(['/bin/sh', os.path.expanduser('startup.sh')])
-				# os.spawnl(os.P_DETACH, '/bin/sh', os.path.expanduser('startup.sh'))
-				print(owlie.pid)
-			sleep(5)
+# 		print("Loop..", end="",flush=True)
+# 		while True:
+# 			if self.PID_running():
+# 				sleep(5)
+# 			else:
+# 				print("starting new owlie with PID:",end="",flush=True)
+# 				owlie = subprocess.Popen(['/bin/sh', os.path.expanduser('startup.sh')])
+# 				# os.spawnl(os.P_DETACH, '/bin/sh', os.path.expanduser('startup.sh'))
+# 				print(owlie.pid)
+# 			sleep(5)
 
-			# pass
+# 			# pass
 						
-owl = owl()
+# owl = owl()
