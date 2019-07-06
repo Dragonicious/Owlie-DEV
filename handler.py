@@ -16,12 +16,20 @@ logger.addHandler(consoleLogger)
 logger.addHandler(fileLogger)
 
 
+
 import subprocess
 import threading
 import os
 import sys
 from time import sleep
 # from run import owlie
+
+
+PID = os.getpid()
+with open("PID_HANDLER.txt","w") as PID_FILE:
+	PID_FILE.write(str(PID))
+	logger.debug('Handler trace created: ' + str(PID))
+
 
 class owl:
 
@@ -84,9 +92,9 @@ class owl:
 			if self.PID_running():
 				sleep(5)
 			else:
-				owlie = subprocess.Popen(['/bin/sh', os.path.expanduser('startup.sh')])
 				logger.debug("Starting new Owlie. PID: " +str(owlie.pid))
+				owlie = subprocess.Popen(['/bin/sh', os.path.expanduser('startup.sh')])
 			sleep(5)
 
 if __name__ == "__main__":
-	owl = owl()
+	owl_start = owl()

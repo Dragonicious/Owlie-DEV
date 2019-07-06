@@ -1,4 +1,6 @@
 import logging
+logging.basicConfig(filename='events.log', 			format='%(asctime)s %(levelname)s:%(message)s', level=logging.INFO)
+
 logger = logging.getLogger('rpi')
 logger.setLevel(logging.DEBUG)
 
@@ -19,6 +21,7 @@ from time import sleep
 import sys
 
 
+crash_count = 0
 
 
 class owlie:
@@ -40,7 +43,7 @@ class owlie:
 
 		@bot.event
 		async def on_ready():
-			logger.debug('Owlie - ready!')
+			logger.debug('Owlie - ready! ' + str('Current run attempts: ') + str(crash_count))
 
 		@bot.event
 		async def on_message(message):
@@ -49,24 +52,30 @@ class owlie:
 			if message.content == 'EXIT' and message.author.id == config.owner_id:
 				exit()
 
-			if message.server.id == config.server and message.author != bot.user:
+			if message.guild.id == config.server and message.author != bot.user:
 				await Reader.read(message)
 
 		@bot.event
 		async def on_member_join(member):
+			await Reader.welcome(message)
 			await bot.send_message(discord.Object(id=config.main_channel), "Hi "+member.mention+"! Nepamiršk paskaityti #info ir prisistatyti ^^ !")
 
 		bot.run(config.bot_key)
-# logging.info('Owlie: Ready!')
-crash_count = 0
 
 
-def run():
+
+def run(crash_count = 0, last_exception = None):
+	
 	try:
 		owlie()
 	except Exception as e:
 		logger.critical('Owlie died:\n ' + str(e.__class__.__name__)+'\n'+str(e.args))
 		crash_count += 1
-		run()
+		if e.args == last_exception:
+			sleep(5)
+			run(crash_count, e.args)
+		else:
+			sleep(0.1)
+			run(crash_count, e.args)
 
 run()

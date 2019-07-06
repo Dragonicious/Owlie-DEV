@@ -11,6 +11,7 @@ from config import config
 from Classes.Response import Response
 from Classes.Holder import Holder
 from Classes.Subject import Subject
+import datetime
 
 class Reader:
 	# Processes messages, initiates actions if needed
@@ -41,6 +42,19 @@ class Reader:
 		tmp_print_msg = str(time.strftime("%m-%d %H:%M")) + " |\t" + str(last_msg_sub.name) + ": " +str(last_msg_sub.last_message)
 		print("\t"+str(tmp_print_msg))
 			
+	async def welcome(self, message):
+		hour = datetime.now().hour
+		if hour >= 5 and hour < 11:
+			welcome_msg = "Laba ryta, "
+		elif hour >= 11 and hour < 6:
+			welcome_msg = "Laba diena, "
+		elif hour >= 6 and hour < 12:
+			welcome_msg = "Laba vakara, "
+		else:
+			welcome_msg = "Laba.. naktis(?), "
+
+		msg = welcome_msg + member_mention + " žvilgtelk į " + info_channel_link +" ir būk geras " + self.random_emote() 
+
 
 	async def check_spam(self, message):
 		author = message.author.id
@@ -101,3 +115,19 @@ class Reader:
 			except discord.errors.Forbidden:
 				logger.warning("Can't kick "+ str(message.author) + str(message.author.id)+ " - missing permissions")
 
+	
+	def random_emote(self):
+		emotes = [
+			"( ͡° ͜ʖ ͡°)",
+			"ʕ•ᴥ•ʔ",
+			"•ᴗ•",
+			"ಠᴗಠ",
+			"(စ‿စ )",
+			" (ꙨပꙨ)",
+			"(◉ܫ◉)",
+			"(~‾▿‾)~",
+			"V●ᴥ●V",
+			"｡^‿^｡",
+			"(ง^ᗜ^)ง"
+		]
+		return 

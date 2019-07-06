@@ -1,15 +1,19 @@
 import json
-# try:
-try:
-	from config import config
-except SystemError:
-	from .config import config
+
+class config:
+	debuging = False
+	#______________ database ______________
+	db_host				= "localhost"
+	db_user				= "owl"
+	db_passwd			= "owlparanormal"
+	db_db				= "discord" 
+	db_connect_timeout 	= 5
 
 try:
 	import MySQLdb
 	import MySQLdb.cursors
 	db_module = 'mysqldb'
-except ImportError:
+except ModuleNotFoundError:
 	try:
 		import pymysql
 		import pymysql.cursors
@@ -33,7 +37,7 @@ class Sql:
 	def connect(self):
 		# print('Db type: ', db_module)
 		if db_module == 'pymysql':
-			self.db = pymysql.connect(host=config.db_host,
+			self.db = pymysql.connect(host='192.168.1.188',
 				user=config.db_user,
 				password=config.db_passwd,
 				db=self.db_db,
@@ -85,6 +89,14 @@ class Sql:
 			self.disconnect()
 		return execute
 
+
+
+	def 
+
+	#============================================================================
+	#============================================================================
+	#============================================================================
+	#============================================================================
 	def get_all_subjects(self):
 		#get subject data
 		# try:

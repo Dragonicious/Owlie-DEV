@@ -51,17 +51,17 @@ while task != 0:
 					
 
 
-					# if rechour == hour: 
+					# if rechour == hour:  
 						# print (rechour, hour)
 
 		# for day in opti:
 		# 	print(opti[day])
 
-		Sql.put("DELETE FROM `stats_opti_h` WHERE 0")
-		# print(json.dumps(opti))
+		Sql.put("DELETE FROM `stats_opti_h` WHERE 0"); 
+	# print(json.dumps(opti)) 
 		
-		for day in opti:
-			print (day)
+		for day in opti: 
+			print (day) 
 			# print(json.dumps(opti[day]))
 
 			for channel in opti[day]:
